@@ -179,6 +179,14 @@ ZiggeoSdk.Videos = {
     ZiggeoSdk.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
   },
 
+  download_video: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.get('/v1/videos/' + token_or_key + '/video', callbacks);
+  },
+
+  download_image: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.get('/v1/videos/' + token_or_key + '/image', callbacks);
+  },
+
   update: function (token_or_key, data, callbacks) {
     ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
   },
