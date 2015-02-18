@@ -44,7 +44,7 @@ ZiggeoSdk.Connect = {
 	
 	__fs: require("fs"),
 	
-	request: function (method, path, callbacks, data, file, meta) {
+	requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
 		var options = this.__options(method, path, meta);
 		var post_data = null;
 		if (data) {
@@ -60,10 +60,12 @@ ZiggeoSdk.Connect = {
 		}
 		var provider = options.ssl ? this.__https : this.__http;
 		var request = provider.request(options, function (result) {
-			var data = "";
+			var data = [];
 			result.on("data", function (chunk) {
-				data += chunk;
+				data.push(chunk);
 			}).on("end", function () {
+				if (post_process_data)
+					data = post_process_data(data);
 				if (result.statusCode >= 200 && result.statusCode < 300) {
 					if (callbacks) {
 						if (callbacks.success)
@@ -103,20 +105,28 @@ ZiggeoSdk.Connect = {
 		}
 	},
 
-	requestJSON: function (method, path, callbacks, data, file, meta) {
-		this.request(method, path, {
-			success: function (data) {
-				if (callbacks) {
-					if (callbacks.success)
-						callbacks.success(JSON.parse(data));
-					else
-						callbacks(JSON.parse(data));
-				}					
-			},
-			failure: callbacks.failure
-		}, data, file, meta);
+	requestBinary: function (method, path, callbacks, data, file, meta) {
+		return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
+			return Buffer.concat(data);
+		});
 	},
 	
+	request: function (method, path, callbacks, data, file, meta) {
+		return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
+			return data.join("");
+		});
+	},	
+	
+	requestJSON: function (method, path, callbacks, data, file, meta) {
+		return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
+			return JSON.parse(data.join(""));
+		});
+	},
+	
+	getBinary: function (path, callbacks, data) {
+		this.requestBinary("GET", path, callbacks, data);
+	},
+
 	get: function (path, callbacks, data) {
 		this.request("GET", path, callbacks, data);
 	},
@@ -180,11 +190,11 @@ ZiggeoSdk.Videos = {
   },
 
   download_video: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.get('/v1/videos/' + token_or_key + '/video', callbacks);
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
   },
 
   download_image: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.get('/v1/videos/' + token_or_key + '/image', callbacks);
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
   },
 
   update: function (token_or_key, data, callbacks) {
@@ -216,11 +226,11 @@ ZiggeoSdk.Streams = {
   },
 
   download_video: function (video_token_or_key, token_or_key, callbacks) {
-    ZiggeoSdk.Connect.get('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
   },
 
   download_image: function (video_token_or_key, token_or_key, callbacks) {
-    ZiggeoSdk.Connect.get('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
   },
 
   destroy: function (video_token_or_key, token_or_key, callbacks) {
