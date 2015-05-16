@@ -27,7 +27,7 @@ ZiggeoSdk.Connect = {
 			headers: {}
 		};
 		if (!("auth" in meta) || meta.auth)
-			obj.headers['Authorization'] = 'Basic ' + new Buffer(ZiggeoSdk.Config.token + ':' + ZiggeoSdk.Config.private_key).toString('base64');
+			obj.headers.Authorization = 'Basic ' + new Buffer(ZiggeoSdk.Config.token + ':' + ZiggeoSdk.Config.private_key).toString('base64');
 		var i = obj.host.indexOf(':');
 		if (i >= 0) {
 			obj.port = obj.host.substr(i + 1);
