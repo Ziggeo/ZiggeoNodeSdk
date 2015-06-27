@@ -244,6 +244,28 @@ ZiggeoSdk.Streams = {
       delete data.file;
     }
     ZiggeoSdk.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data, file);
+  },
+
+  attach_image: function (video_token_or_key, token_or_key, data, callbacks) {
+    var file = null;
+    if (data && data.file) {
+      file = data.file;
+      delete data.file;
+    }
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks, data, file);
+  },
+
+  attach_video: function (video_token_or_key, token_or_key, data, callbacks) {
+    var file = null;
+    if (data && data.file) {
+      file = data.file;
+      delete data.file;
+    }
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks, data, file);
+  },
+
+  bind: function (video_token_or_key, token_or_key, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/bind', callbacks);
   }
 
 };
