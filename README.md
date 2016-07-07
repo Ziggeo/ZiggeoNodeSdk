@@ -127,7 +127,7 @@ Arguments
 Delete a single video by token or key. 
 
 ```node 
-ZiggeoSdk.Videos.delete(token_or_key, [callbacks]) 
+ZiggeoSdk.Videos.destroy(token_or_key, [callbacks]) 
 ``` 
  
 
