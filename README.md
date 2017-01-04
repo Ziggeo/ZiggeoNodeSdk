@@ -1,6 +1,6 @@
-# Ziggeo Node.js Server SDK 0.0.13
+# Ziggeo Node.js Server SDK 0.0.15
 
-Ziggeo API (http://ziggeo.com) allows you to integrate video recording and playback with only
+Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
 
 Pull requests welcome.
@@ -55,7 +55,7 @@ ZiggeoSdk.init('*token*', '*private_key*', '*encryption_key*');
 ## Server-Side Methods
 
 ### Videos  
- 
+
 The videos resource allows you to access all single videos. Each video may contain more than one stream. 
  
 
@@ -105,6 +105,18 @@ ZiggeoSdk.Videos.download_image(token_or_key, [callbacks])
  
 
 
+#### Push To Service 
+ 
+Push a video to a provided push service. 
+
+```node 
+ZiggeoSdk.Videos.push_to_service(token_or_key, arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- pushservicetoken: *Push Services's token (from the Push Services configured for the app)* 
+
+
 #### Update 
  
 Update single video by token or key. 
@@ -150,7 +162,7 @@ Arguments
 
 
 ### Streams  
- 
+
 The streams resource allows you to directly access all streams associated with a single video. 
  
 
@@ -194,6 +206,18 @@ Download the image data associated with the stream
 ZiggeoSdk.Streams.download_image(video_token_or_key, token_or_key, [callbacks]) 
 ``` 
  
+
+
+#### Push To Service 
+ 
+Push a stream to a provided push service. 
+
+```node 
+ZiggeoSdk.Streams.push_to_service(video_token_or_key, token_or_key, arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- pushservicetoken: *Push Services's token (from the Push Services configured for the app)* 
 
 
 #### Delete 
@@ -253,7 +277,7 @@ ZiggeoSdk.Streams.bind(video_token_or_key, token_or_key, arguments, [callbacks])
 
 
 ### Authtokens  
- 
+
 The auth token resource allows you to manage authorization settings for video objects. 
  
 

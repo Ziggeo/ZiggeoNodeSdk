@@ -197,6 +197,10 @@ ZiggeoSdk.Videos = {
     ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
   },
 
+  push_to_service: function (token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
+  },
+
   update: function (token_or_key, data, callbacks) {
     ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
   },
@@ -231,6 +235,10 @@ ZiggeoSdk.Streams = {
 
   download_image: function (video_token_or_key, token_or_key, callbacks) {
     ZiggeoSdk.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
+  },
+
+  push_to_service: function (video_token_or_key, token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/push', callbacks, data);
   },
 
   destroy: function (video_token_or_key, token_or_key, callbacks) {
