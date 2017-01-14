@@ -4,7 +4,7 @@
 	"version": "0.0.15",
 	"author": "Ziggeo",
 	"repository": "https://github.com/Ziggeo/ZiggeoNodeSdk.git",
-	"license": "Apache 2.0",
+	"license": "Apache-2.0",
     "engines": {
 	    "node": ""
  	}

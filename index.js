@@ -12,7 +12,8 @@ module.exports = ZiggeoSdk;
 
 ZiggeoSdk.Config = {
 	local: false,
-	server_api_url: "srvapi.ziggeo.com"
+	server_api_url: "srvapi.ziggeo.com",
+  requestTimeout: 30 * 1000 // Set 30 seconds server response timeout
 };
 
 ZiggeoSdk.Connect = {
@@ -22,6 +23,7 @@ ZiggeoSdk.Connect = {
 		var obj = {
 			host: meta.host ? meta.host : ZiggeoSdk.Config.server_api_url,
 			ssl: "ssl" in meta ? meta.ssl : !ZiggeoSdk.Config.local,
+      timeout: ZiggeoSdk.Config.requestTimeout,
 			path: path,
 			method: method,
 			headers: {}
@@ -47,6 +49,8 @@ ZiggeoSdk.Connect = {
 	requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
 		var options = this.__options(method, path, meta);
 		var post_data = null;
+		var timeout = ZiggeoSdk.Config.timeout;
+
 		if (data) {
 			if (method == "GET") {
 				options.path = options.path + "?" + this.__querystring.stringify(data);
@@ -59,6 +63,11 @@ ZiggeoSdk.Connect = {
 			}			
 		}
 		var provider = options.ssl ? this.__https : this.__http;
+
+    // Ignore invalid self-signed ssl certificate for testing purposes
+    if( ZiggeoSdk.Config.local )
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 		var request = provider.request(options, function (result) {
 			var data = [];
 			result.on("data", function (chunk) {
@@ -74,11 +83,29 @@ ZiggeoSdk.Connect = {
 							callbacks(data);
 					}
 				} else {
-					if (callbacks.failure)
-						callbacks.failure(data);
+          if (callbacks.failure)
+            callbacks.failure(data);
+          else
+            callbacks(new Error("Error with status code: " + result.statusCode + '/' + result.statusMessage + '. Please be sure correct arguments provided.'));
 				}
 			});
 		});
+
+    request.setTimeout( timeout, function() {});
+
+    request
+      .on('socket', function(socket) {
+        socket.removeAllListeners('timeout'); 			// remove node's default listener
+        socket.setTimeout( timeout, function(){ }); // there shouldn't be of 'inactivity'
+        socket.on('timeout', function() {
+          callbacks(new Error('Connection timed out. Socket couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
+        });
+      }).on('timeout', function() {
+      callbacks(new Error('Connection timed out. Couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
+    }).on('error', function (e) {
+      console.log('Got error: ' + e.message ) ;
+    });
+
 		if (file) {
 			var boundaryKey = Math.random().toString(16);
 			request.setHeader('Content-Type', 'multipart/form-data; boundary="'+boundaryKey+'"');
