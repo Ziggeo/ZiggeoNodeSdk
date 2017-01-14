@@ -91,8 +91,6 @@ ZiggeoSdk.Connect = {
 			});
 		});
 
-    request.setTimeout( timeout, function() {});
-
     request
       .on('socket', function(socket) {
         socket.removeAllListeners('timeout'); 			// remove node's default listener
