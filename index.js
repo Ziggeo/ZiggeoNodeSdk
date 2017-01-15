@@ -49,7 +49,7 @@ ZiggeoSdk.Connect = {
 	requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
 		var options = this.__options(method, path, meta);
 		var post_data = null;
-		var timeout = ZiggeoSdk.Config.timeout;
+		var timeout = ZiggeoSdk.Config.requestTimeout;
 
 		if (data) {
 			if (method == "GET") {
@@ -85,8 +85,14 @@ ZiggeoSdk.Connect = {
 				} else {
           if (callbacks.failure)
             callbacks.failure(data);
-          else
-            callbacks(new Error("Error with status code: " + result.statusCode + '/' + result.statusMessage + '. Please be sure correct arguments provided.'));
+          else {
+
+            if( data === 'Not found' )
+              throw Error("Error with status message: " + result.statusMessage +
+								'. Please be sure correct keys provided. Token for video and application they are different.\n');
+						else
+            	throw Error("Error with status message: " + result.statusMessage + '. Please be sure correct arguments provided.');
+					}
 				}
 			});
 		});
@@ -96,13 +102,17 @@ ZiggeoSdk.Connect = {
         socket.removeAllListeners('timeout'); 			// remove node's default listener
         socket.setTimeout( timeout, function(){ }); // there shouldn't be of 'inactivity'
         socket.on('timeout', function() {
-          callbacks(new Error('Connection timed out. Socket couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
+          callbacks(new Error('Socket connection timed out. Socket couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
+          request.abort();
         });
-      }).on('timeout', function() {
-      callbacks(new Error('Connection timed out. Couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
-    }).on('error', function (e) {
-      console.log('Got error: ' + e.message ) ;
-    });
+      })
+			.on('timeout', function() {
+        callbacks(new Error('Request connection timed out. Couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
+        request.abort();
+    	})
+			.on('error', function (e) {
+      	console.log('Got error: ' + e.message ) ;
+    	});
 
 		if (file) {
 			var boundaryKey = Math.random().toString(16);
