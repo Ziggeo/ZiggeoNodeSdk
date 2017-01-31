@@ -13,7 +13,7 @@ module.exports = ZiggeoSdk;
 ZiggeoSdk.Config = {
 	local: false,
 	server_api_url: "srvapi.ziggeo.com",
-  requestTimeout: 30 * 1000 // Set 30 seconds server response timeout
+	requestTimeout: 60 * 1000
 };
 
 ZiggeoSdk.Connect = {
@@ -23,9 +23,9 @@ ZiggeoSdk.Connect = {
 		var obj = {
 			host: meta.host ? meta.host : ZiggeoSdk.Config.server_api_url,
 			ssl: "ssl" in meta ? meta.ssl : !ZiggeoSdk.Config.local,
-      timeout: ZiggeoSdk.Config.requestTimeout,
 			path: path,
 			method: method,
+			timeout: ZiggeoSdk.Config.requestTimeout,
 			headers: {}
 		};
 		if (!("auth" in meta) || meta.auth)
@@ -49,8 +49,7 @@ ZiggeoSdk.Connect = {
 	requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
 		var options = this.__options(method, path, meta);
 		var post_data = null;
-		var timeout = ZiggeoSdk.Config.requestTimeout;
-
+		var timeout = options.timeout;
 		if (data) {
 			if (method == "GET") {
 				options.path = options.path + "?" + this.__querystring.stringify(data);
@@ -63,11 +62,8 @@ ZiggeoSdk.Connect = {
 			}			
 		}
 		var provider = options.ssl ? this.__https : this.__http;
-
-    // Ignore invalid self-signed ssl certificate for testing purposes
-    if( ZiggeoSdk.Config.local )
-      process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
+		if (ZiggeoSdk.Config.local)
+			process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		var request = provider.request(options, function (result) {
 			var data = [];
 			result.on("data", function (chunk) {
@@ -83,36 +79,21 @@ ZiggeoSdk.Connect = {
 							callbacks(data);
 					}
 				} else {
-          if (callbacks.failure)
-            callbacks.failure(data);
-          else {
-
-            if( data === 'Not found' )
-              throw Error("Error with status message: " + result.statusMessage +
-								'. Please be sure correct keys provided. Token for video and application they are different.\n');
-						else
-            	throw Error("Error with status message: " + result.statusMessage + '. Please be sure correct arguments provided.');
-					}
+					if (callbacks.failure)
+						callbacks.failure(data);
 				}
 			});
 		});
-
-    request
-      .on('socket', function(socket) {
-        socket.removeAllListeners('timeout'); 			// remove node's default listener
-        socket.setTimeout( timeout, function(){ }); // there shouldn't be of 'inactivity'
-        socket.on('timeout', function() {
-          callbacks(new Error('Socket connection timed out. Socket couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
-          request.abort();
-        });
-      })
-			.on('timeout', function() {
-        callbacks(new Error('Request connection timed out. Couldn\'t connect to server in ' + timeout/1000 + ' seconds.'));
-        request.abort();
-    	})
-			.on('error', function (e) {
-      	console.log('Got error: ' + e.message ) ;
-    	});
+		request.on('socket', function(socket) {
+			socket.removeAllListeners('timeout');
+			socket.setTimeout(timeout, function() {});
+			socket.on('timeout', function() {
+				request.abort();
+			});
+		}).on('timeout', function() {
+	        callbacks(new Error('Request timed out.'));
+	        request.abort();
+    	}).on('error', function (e) {});
 
 		if (file) {
 			var boundaryKey = Math.random().toString(16);
