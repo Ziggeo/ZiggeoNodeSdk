@@ -13,6 +13,7 @@ module.exports = ZiggeoSdk;
 ZiggeoSdk.Config = {
 	local: false,
 	server_api_url: "srvapi.ziggeo.com",
+    regions: {"r1":"srvapi-eu-west-1.ziggeo.com"},
 	requestTimeout: 60 * 1000
 };
 
@@ -20,8 +21,12 @@ ZiggeoSdk.Connect = {
 	
 	__options: function(method, path, meta) {
 		meta = meta || {};
+		var server_api_url = ZiggeoSdk.Config.server_api_url;
+		for (var key in ZiggeoSdk.Config.regions)
+			if (ZiggeoSdk.Config.token.indexOf(key) === 0 )
+				server_api_url = ZiggeoSdk.Config.regions[key];
 		var obj = {
-			host: meta.host ? meta.host : ZiggeoSdk.Config.server_api_url,
+			host: meta.host ? meta.host : server_api_url,
 			ssl: "ssl" in meta ? meta.ssl : !ZiggeoSdk.Config.local,
 			path: path,
 			method: method,
