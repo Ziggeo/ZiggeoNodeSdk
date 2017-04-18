@@ -222,6 +222,10 @@ ZiggeoSdk.Videos = {
     ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
   },
 
+  apply_effect: function (token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
+  },
+
   update: function (token_or_key, data, callbacks) {
     ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
   },
