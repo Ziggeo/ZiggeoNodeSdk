@@ -7,10 +7,15 @@ var video_token = process.argv[4];
 ZiggeoSdk.init(app_token, private_key);
 
 // you can find example of grants JSON at https://ziggeo.com/docs/api/authorization-tokens/examples
-
-ZiggeoSdk.Videos.download_video(video_token, function(data){
-    fs.writeFile('test.webm', data, function(err){
-        
-    });
-    // console.log(data);
+ZiggeoSdk.Videos.get (video_token, {
+    success: function (video) {
+        downloadVideo(video);
+    }
 });
+function downloadVideo(video){
+    ZiggeoSdk.Videos.download_video(video.token, function(data){
+        fs.writeFile(video.token+'.webm', data, function(err){
+            
+        });
+    });
+}
