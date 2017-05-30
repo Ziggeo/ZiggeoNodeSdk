@@ -1,7 +1,11 @@
 ZiggeoSdk = require("../index.js");
 
-ZiggeoSdk.init(process.argv[2], process.argv[3]);
+var app_token = process.argv[2];
+var private_key = process.argv[3];
+var filename = process.argv[4];
+
+ZiggeoSdk.init(app_token, private_key);
 
 ZiggeoSdk.Videos.create({
-	file: process.argv[4]
+	file: filename
 });
