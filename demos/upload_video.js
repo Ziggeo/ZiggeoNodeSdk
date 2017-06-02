@@ -8,4 +8,6 @@ ZiggeoSdk.init(app_token, private_key);
 
 ZiggeoSdk.Videos.create({
 	file: filename
+}, function(data){
+	console.log(data);
 });

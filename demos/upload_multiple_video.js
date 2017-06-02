@@ -32,7 +32,6 @@ function uploadSingleFile(){
 	ZiggeoSdk.Videos.create({
 		file: folder_name+file_to_upload
 	}, function(data){
-		// console.log(data);
 		uploadSingleFile();
 	});
 }
