@@ -13,9 +13,9 @@ ZiggeoSdk.Videos.get (video_token, {
     }
 });
 function downloadVideo(video){
-    ZiggeoSdk.Videos.download_video(video.token, function(data){
-        fs.writeFile(video.token+'.webm', data, function(err){
-            
+    ZiggeoSdk.Streams.download_video(video.token, video.default_stream.token, function(data){
+        fs.writeFile(video.token+'.'+video.default_stream.video_type, data, function(err){
+            console.log('downloaded\n');
         });
     });
 }
