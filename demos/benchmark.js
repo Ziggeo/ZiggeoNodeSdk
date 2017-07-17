@@ -10,17 +10,19 @@ var videos = [];
 
 ZiggeoSdk.init(app_token, private_key);
 var upload_time = Math.floor(Date.now() / 1000);
+var download_time = 0;
 var delete_time = 0;
 uploadVideo();
+var upload_counter = 0;
 var download_counter = 0;
 var delete_counter = 0;
 function uploadVideo(){
-	if(download_counter >= ops_time){
+	if(upload_counter >= ops_time){
 		upload_time = Math.floor(Date.now() / 1000) - upload_time;
 		upload_time = upload_time/ops_time;
 		console.log("Upload: "+upload_time);
-		delete_time = Math.floor(Date.now() / 1000);
-		deleteVideo();
+		download_time = Math.floor(Date.now() / 1000);
+		downloadVideo();
 		return;
 	}
 	ZiggeoSdk.Videos.create({
@@ -28,8 +30,23 @@ function uploadVideo(){
 	}, function(data){
 		console.log(data.token);
 		videos.push(data.token);
-		download_counter += 1;
+		upload_counter += 1;
 		uploadVideo();
+	});
+}
+
+function downloadVideo(){
+	if(download_counter >= ops_time){
+		download_time = Math.floor(Date.now() / 1000) - download_time;
+		download_time = download_time/ops_time;
+		console.log("Download: "+download_time);
+		delete_time = Math.floor(Date.now() / 1000);
+		deleteVideo();
+		return;
+	}
+	ZiggeoSdk.Videos.download_video(videos[download_counter], function(){
+		download_counter += 1;
+		downloadVideo();
 	});
 }
 
@@ -38,6 +55,7 @@ function deleteVideo(){
 		delete_time = Math.floor(Date.now() / 1000) - delete_time;
 		delete_time = delete_time/ops_time;
 		console.log("Delete: "+delete_time);
+		return;
 	}
 	ZiggeoSdk.Videos.destroy(videos[delete_counter], function(){
 		delete_counter += 1;
