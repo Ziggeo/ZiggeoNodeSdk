@@ -28,7 +28,6 @@ function uploadVideo(){
 	ZiggeoSdk.Videos.create({
 		file: filename
 	}, function(data){
-		console.log(data.token);
 		videos.push(data.token);
 		upload_counter += 1;
 		uploadVideo();
