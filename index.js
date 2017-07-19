@@ -200,47 +200,69 @@ ZiggeoSdk.Auth = {
 	}
 };
 
-ZiggeoSdk.Videos = {
+ZiggeoSdk.Authtokens = {
 
-  index: function (data, callbacks) {
-    ZiggeoSdk.Connect.getJSON('/v1/videos/', callbacks, data);
-  },
-
-  get: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
-  },
-
-  download_video: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
-  },
-
-  download_image: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
-  },
-
-  push_to_service: function (token_or_key, data, callbacks) {
-    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
-  },
-
-  apply_effect: function (token_or_key, data, callbacks) {
-    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
+  get: function (token, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/authtokens/' + token + '', callbacks);
   },
 
   update: function (token_or_key, data, callbacks) {
-    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
+    ZiggeoSdk.Connect.postJSON('/v1/authtokens/' + token_or_key + '', callbacks, data);
   },
 
   destroy: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.destroy('/v1/videos/' + token_or_key + '', callbacks);
+    ZiggeoSdk.Connect.destroy('/v1/authtokens/' + token_or_key + '', callbacks);
   },
 
   create: function (data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/authtokens/', callbacks, data);
+  }
+
+};
+ZiggeoSdk.EffectProfileProcess = {
+
+  index: function (effect_token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/effects/' + effect_token_or_key + '/process', callbacks, data);
+  },
+
+  get: function (effect_token_or_key, token_or_key, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/effects/' + effect_token_or_key + '/process/' + token_or_key + '', callbacks);
+  },
+
+  destroy: function (effect_token_or_key, token_or_key, callbacks) {
+    ZiggeoSdk.Connect.destroy('/v1/effects/' + effect_token_or_key + '/process/' + token_or_key + '', callbacks);
+  },
+
+  create_filter_process: function (effect_token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/filter', callbacks, data);
+  },
+
+  create_watermark_process: function (effect_token_or_key, data, callbacks) {
     var file = null;
     if (data && data.file) {
       file = data.file;
       delete data.file;
     }
-    ZiggeoSdk.Connect.postJSON('/v1/videos/', callbacks, data, file);
+    ZiggeoSdk.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark', callbacks, data, file);
+  }
+
+};
+ZiggeoSdk.EffectProfiles = {
+
+  create: function (data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/effects/', callbacks, data);
+  },
+
+  index: function (data, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/effects/', callbacks, data);
+  },
+
+  get: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/effects/' + token_or_key + '', callbacks);
+  },
+
+  destroy: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.destroy('/v1/effects/' + token_or_key + '', callbacks);
   }
 
 };
@@ -302,22 +324,47 @@ ZiggeoSdk.Streams = {
   }
 
 };
-ZiggeoSdk.Authtokens = {
+ZiggeoSdk.Videos = {
 
-  get: function (token, callbacks) {
-    ZiggeoSdk.Connect.getJSON('/v1/authtokens/' + token + '', callbacks);
+  index: function (data, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/videos/', callbacks, data);
+  },
+
+  get: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
+  },
+
+  download_video: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
+  },
+
+  download_image: function (token_or_key, callbacks) {
+    ZiggeoSdk.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
+  },
+
+  push_to_service: function (token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
+  },
+
+  apply_effect: function (token_or_key, data, callbacks) {
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
   },
 
   update: function (token_or_key, data, callbacks) {
-    ZiggeoSdk.Connect.postJSON('/v1/authtokens/' + token_or_key + '', callbacks, data);
+    ZiggeoSdk.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
   },
 
   destroy: function (token_or_key, callbacks) {
-    ZiggeoSdk.Connect.destroy('/v1/authtokens/' + token_or_key + '', callbacks);
+    ZiggeoSdk.Connect.destroy('/v1/videos/' + token_or_key + '', callbacks);
   },
 
   create: function (data, callbacks) {
-    ZiggeoSdk.Connect.postJSON('/v1/authtokens/', callbacks, data);
+    var file = null;
+    if (data && data.file) {
+      file = data.file;
+      delete data.file;
+    }
+    ZiggeoSdk.Connect.postJSON('/v1/videos/', callbacks, data, file);
   }
 
 };
