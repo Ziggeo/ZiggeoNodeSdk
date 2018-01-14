@@ -1,11 +1,12 @@
-ZiggeoSdk = require("../index.js");
 fs = require('fs');
 var api_token = process.argv[2];
 var private_key = process.argv[3];
 var list_file = process.argv[4];
 
 
-ZiggeoSdk.init(api_token, private_key);
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(app_token, private_key);
+
 var list_data = JSON.parse(fs.readFileSync(list_file, 'utf8'));
 var file_to_delete = list_data.data;
 var video_counter = 0;
