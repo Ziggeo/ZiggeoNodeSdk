@@ -1,4 +1,3 @@
-ZiggeoSdk = require("../index.js");
 
 var fs = require("fs");
 
@@ -17,7 +16,8 @@ if(folder_name.slice(-1) !== '/'){
 	folder_name = folder_name+'/';
 }
 
-ZiggeoSdk.init (app_token, private_key);
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(app_token, private_key);
 
 fs.readdirSync (folder_name).forEach(file => {
   file_list.push(file);

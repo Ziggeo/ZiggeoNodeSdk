@@ -1,10 +1,9 @@
-ZiggeoSdk = require("../index.js");
-
 var app_token = process.argv[2];
 var private_key = process.argv[3];
 var encryption_key = process.argv[4];
 
-ZiggeoSdk.init(app_token, private_key, encryption_key);
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(app_token, private_key, encryption_key);
 
 // you can find example of grants JSON at https://ziggeo.com/docs/api/authorization-tokens/examples
 var grants = {
@@ -20,8 +19,5 @@ var token_arguments = {
     session_limit: 1,
     volatile: true
 };
-ZiggeoSdk.Authtokens.create(token_arguments, {
-    success: function (data) {
-        console.log(data);
-    }
-});
+var data = ZiggeoSdk.Auth.generate(token_arguments);
+console.log(data);

@@ -1,6 +1,6 @@
-ZiggeoSdk = require("../index.js");
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(process.argv[2], process.argv[3]);
 
-ZiggeoSdk.init(process.argv[2], process.argv[3]);
 var video_to_skip = 0;
 console.log('Start fetching video tokens ');
 indexVideo(0);

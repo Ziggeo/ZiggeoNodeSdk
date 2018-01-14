@@ -1,6 +1,5 @@
-ZiggeoSdk = require("../index.js");
-
-ZiggeoSdk.init(process.argv[2], process.argv[3], process.argv[4]);
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(process.argv[2], process.argv[3], process.argv[4]);
 
 var token = process.argv[5];
 

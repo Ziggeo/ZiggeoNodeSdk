@@ -1,5 +1,3 @@
-ZiggeoSdk = require("../index.js");
-
 var app_token = process.argv[2];
 var private_key = process.argv[3];
 var filename = process.argv[4];
@@ -8,7 +6,9 @@ var ops_time = process.argv[5];
 var videos = [];
 
 
-ZiggeoSdk.init(app_token, private_key);
+var Ziggeo = require("../index.js");
+var ZiggeoSdk = new Ziggeo(app_token, private_key);
+
 var upload_time = Math.floor(Date.now() / 1000);
 var download_time = 0;
 var delete_time = 0;

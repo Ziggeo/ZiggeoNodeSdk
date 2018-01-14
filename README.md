@@ -1,4 +1,4 @@
-# Ziggeo Node.js Server SDK 0.0.20
+# Ziggeo Node.js Server SDK 0.1.0
 
 Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
@@ -47,8 +47,8 @@ For the full documentation, please visit [ziggeo.com](https://ziggeo.com/docs).
 You can integrate the Server SDK as follows:
 
 ```node 
-ZiggeoSdk = require('ziggeo');
-ZiggeoSdk.init('*token*', '*private_key*', '*encryption_key*'); 
+Ziggeo = require('ziggeo');
+var ZiggeoSdk = new Ziggeo('*token*', '*private_key*', '*encryption_key*'); 
 ```
 
 
@@ -468,6 +468,6 @@ Arguments
 
 ## License
 
-Copyright (c) 2013-2017 Ziggeo
+Copyright (c) 2013-2018 Ziggeo
  
 Apache 2.0 License
