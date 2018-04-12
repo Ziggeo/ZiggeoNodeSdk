@@ -8,8 +8,8 @@
 	pick "JSON encoding" when adding new webhook url for this file
 */
 // initialize Ziggeo
-const app_token = "efd999fc50ca7c557c0d0e1890f223bb";
-const private_key = "8882523094969d9d8abe40b390ec9c24";
+const app_token = "APP_TOKEN";
+const private_key = "PRIVATE_KEY";
 const Ziggeo = require("../index.js");
 const ZiggeoSdk = new Ziggeo(app_token, private_key);
 var fs = require('fs');
