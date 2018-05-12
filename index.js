@@ -337,8 +337,16 @@ ZiggeoSdk.Videos.prototype.index = function (data, callbacks) {
     this.Connect.getJSON('/v1/videos/', callbacks, data);
 };
 
+ZiggeoSdk.Videos.prototype.count = function (data, callbacks) {
+    this.Connect.getJSON('/v1/videos/count', callbacks, data);
+};
+
 ZiggeoSdk.Videos.prototype.get = function (token_or_key, callbacks) {
     this.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
+};
+
+ZiggeoSdk.Videos.prototype.get_bulk = function (data, callbacks) {
+    this.Connect.postJSON('/v1/videos/get_bulk', callbacks, data);
 };
 
 ZiggeoSdk.Videos.prototype.download_video = function (token_or_key, callbacks) {
@@ -361,6 +369,10 @@ ZiggeoSdk.Videos.prototype.update = function (token_or_key, data, callbacks) {
     this.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
 };
 
+ZiggeoSdk.Videos.prototype.update_bulk = function (data, callbacks) {
+    this.Connect.postJSON('/v1/videos/update_bulk', callbacks, data);
+};
+
 ZiggeoSdk.Videos.prototype.destroy = function (token_or_key, callbacks) {
     this.Connect.destroy('/v1/videos/' + token_or_key + '', callbacks);
 };
@@ -372,5 +384,31 @@ ZiggeoSdk.Videos.prototype.create = function (data, callbacks) {
       delete data.file;
     }
     this.Connect.postJSON('/v1/videos/', callbacks, data, file);
+};
+
+ZiggeoSdk.Videos.prototype.analytics = function (token_or_key, data, callbacks) {
+    this.Connect.postJSON('/v1/videos/' + token_or_key + '/analytics', callbacks, data);
+};
+
+
+ZiggeoSdk.Analytics = function (Connect) {
+  this.Connect = Connect;
+};
+
+ZiggeoSdk.Analytics.prototype.get = function (data, callbacks) {
+    this.Connect.postJSON('/v1/analytics/get', callbacks, data);
+};
+
+
+ZiggeoSdk.Webhooks = function (Connect) {
+  this.Connect = Connect;
+};
+
+ZiggeoSdk.Webhooks.prototype.create = function (data, callbacks) {
+    this.Connect.post('/v1/api/hook', callbacks, data);
+};
+
+ZiggeoSdk.Webhooks.prototype.destroy = function (data, callbacks) {
+    this.Connect.post('/v1/api/removehook', callbacks, data);
 };
 

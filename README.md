@@ -1,4 +1,4 @@
-# Ziggeo Node.js Server SDK 0.1.0
+# Ziggeo Node.js Server SDK 0.1.2
 
 Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
@@ -16,14 +16,16 @@ npm install ziggeo
 For the client-side integration, you need to add these assets to your html file:
 
 ```html 
-<link rel="stylesheet" href="//assets-cdn.ziggeo.com/v1-latest/ziggeo.css" /> 
-<script src="//assets-cdn.ziggeo.com/v1-latest/ziggeo.js"></script> 
+<link rel="stylesheet" href="//assets-cdn.ziggeo.com/v2-stable/ziggeo.css" />
+<script src="//assets-cdn.ziggeo.com/v2-stable/ziggeo.js"></script>
 ```
 
 Then, you need to specify your api token:
 ```html 
 <script>
-	ZiggeoApi.token = "APPLICATION_TOKEN"; 
+    var ziggeoApplication = new ZiggeoApi.V2.Application({
+        token: "APPLICATION_TOKEN"
+    });
 </script>
 ```
 
@@ -31,15 +33,16 @@ You can specify other global options, [see here](https://ziggeo.com/docs).
 
 To fire up a recorder on your page, add:
 ```html 
-<ziggeo></ziggeo> 
+<ziggeorecorder></ziggeorecorder>
 ``` 
 
 To embed a player for an existing video, add:
 ```html 
-<ziggeo ziggeo-video='video-token'></ziggeo> 
+<ziggeoplayer ziggeo-video='video-token'></ziggeoplayer>
 ``` 
 
 For the full documentation, please visit [ziggeo.com](https://ziggeo.com/docs).
+
 
 
 ## Server-Side Integration
@@ -75,6 +78,19 @@ Arguments
 - tags: *Filter the search result to certain tags, encoded as a comma-separated string* 
 
 
+#### Count 
+ 
+Get the video count for the application. 
+
+```node 
+ZiggeoSdk.Videos.count(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- states: *Filter videos by state* 
+- tags: *Filter the search result to certain tags, encoded as a comma-separated string* 
+
+
 #### Get 
  
 Get a single video by token or key. 
@@ -83,6 +99,18 @@ Get a single video by token or key.
 ZiggeoSdk.Videos.get(token_or_key, [callbacks]) 
 ``` 
  
+
+
+#### Get Bulk 
+ 
+Get multiple videos by tokens or keys. 
+
+```node 
+ZiggeoSdk.Videos.get_bulk(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- tokens_or_keys: *Comma-separated list with the desired videos tokens or keys (Limit: 100 tokens or keys).* 
 
 
 #### Download Video 
@@ -146,6 +174,23 @@ Arguments
 - expiration_days: *After how many days will this video be deleted* 
 
 
+#### Update Bulk 
+ 
+Update multiple videos by token or key. 
+
+```node 
+ZiggeoSdk.Videos.update_bulk(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- tokens_or_keys: *Comma-separated list with the desired videos tokens or keys (Limit: 100 tokens or keys).* 
+- min_duration: *Minimal duration of video* 
+- max_duration: *Maximal duration of video* 
+- tags: *Video Tags* 
+- volatile: *Automatically removed this video if it remains empty* 
+- expiration_days: *After how many days will this video be deleted* 
+
+
 #### Delete 
  
 Delete a single video by token or key. 
@@ -171,6 +216,21 @@ Arguments
 - tags: *Video Tags* 
 - key: *Unique (optional) name of video* 
 - volatile: *Automatically removed this video if it remains empty* 
+
+
+#### Analytics 
+ 
+Get analytics for a specific videos with the given params 
+
+```node 
+ZiggeoSdk.Videos.analytics(token_or_key, arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- from: *A UNIX timestamp in microseconds used as the start date of the query* 
+- to: *A UNIX timestamp in microseconds used as the end date of the query* 
+- date: *A UNIX timestamp in microseconds to retrieve data from a single date. If set, it overwrites the from and to params.* 
+- query: *The query you want to run. It can be one of the following: device_views_by_os, device_views_by_date, total_plays_by_country, full_plays_by_country, total_plays_by_hour, full_plays_by_hour, total_plays_by_browser, full_plays_by_browser* 
 
 
 ### Streams  
@@ -461,6 +521,57 @@ Arguments
 - vertical: *Specify the vertical position of your watermark (a value between 0.0 and 1.0)* 
 - horizontal: *Specify the horizontal position of your watermark (a value between 0.0 and 1.0)* 
 - scale: *Specify the image scale of your watermark (a value between 0.0 and 1.0)* 
+
+
+### Webhooks  
+
+The webhooks resource allows you to create or delete webhooks related to a given application. 
+ 
+
+#### Create 
+ 
+Create a new webhook for the given url to catch the given events. 
+
+```node 
+ZiggeoSdk.Webhooks.create(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- target_url: *The url that will catch the events* 
+- encoding: *Data encoding to be used by the webhook to send the events.* 
+- events: *Comma-separated list of the events the webhook will catch. They must be valid webhook type events.* 
+
+
+#### Delete 
+ 
+Delete a webhook using its URL. 
+
+```node 
+ZiggeoSdk.Webhooks.destroy(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- target_url: *The url that will catch the events* 
+
+
+### Analytics  
+
+The analytics resource allows you to access the analytics for the given application 
+ 
+
+#### Get 
+ 
+Get analytics for the given params 
+
+```node 
+ZiggeoSdk.Analytics.get(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- from: *A UNIX timestamp in microseconds used as the start date of the query* 
+- to: *A UNIX timestamp in microseconds used as the end date of the query* 
+- date: *A UNIX timestamp in microseconds to retrieve data from a single date. If set, it overwrites the from and to params.* 
+- query: *The query you want to run. It can be one of the following: device_views_by_os, device_views_by_date, total_plays_by_country, full_plays_by_country, total_plays_by_hour, full_plays_by_hour, total_plays_by_browser, full_plays_by_browser* 
 
 
 
