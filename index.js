@@ -7,6 +7,8 @@ var ZiggeoSdk = function (token, private_key, encryption_key) {
     this.Authtokens = new ZiggeoSdk.Authtokens(this.Connect);
     this.EffectProfiles = new ZiggeoSdk.EffectProfiles(this.Connect);
     this.EffectProfileProcess = new ZiggeoSdk.EffectProfileProcess(this.Connect);
+    this.MetaProfiles = new ZiggeoSdk.MetaProfiles(this.Connect);
+    this.MetaProfileProcess = new ZiggeoSdk.MetaProfileProcess(this.Connect);
 };
 
 module.exports = ZiggeoSdk;
@@ -269,6 +271,56 @@ ZiggeoSdk.EffectProfiles.prototype.destroy = function (token_or_key, callbacks) 
 };
 
 
+ZiggeoSdk.MetaProfileProcess = function (Connect) {
+  this.Connect = Connect;
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.index = function (meta_token_or_key, callbacks) {
+    this.Connect.getJSON('/v1/metaprofiles/' + meta_token_or_key + '/process', callbacks);
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.get = function (meta_token_or_key, token_or_key, callbacks) {
+    this.Connect.getJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/' + token_or_key + '', callbacks);
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.destroy = function (meta_token_or_key, token_or_key, callbacks) {
+    this.Connect.destroy('/v1/metaprofiles/' + meta_token_or_key + '/process/' + token_or_key + '', callbacks);
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.create_video_analysis_process = function (meta_token_or_key, callbacks) {
+    this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/analysis', callbacks);
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.create_audio_transcription_process = function (meta_token_or_key, callbacks) {
+    this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/transcription', callbacks);
+};
+
+ZiggeoSdk.MetaProfileProcess.prototype.create_nsfw_process = function (meta_token_or_key, data, callbacks) {
+    this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/nsfw', callbacks, data);
+};
+
+
+ZiggeoSdk.MetaProfiles = function (Connect) {
+  this.Connect = Connect;
+};
+
+ZiggeoSdk.MetaProfiles.prototype.create = function (data, callbacks) {
+    this.Connect.postJSON('/v1/metaprofiles/', callbacks, data);
+};
+
+ZiggeoSdk.MetaProfiles.prototype.index = function (data, callbacks) {
+    this.Connect.getJSON('/v1/metaprofiles/', callbacks, data);
+};
+
+ZiggeoSdk.MetaProfiles.prototype.get = function (token_or_key, callbacks) {
+    this.Connect.getJSON('/v1/metaprofiles/' + token_or_key + '', callbacks);
+};
+
+ZiggeoSdk.MetaProfiles.prototype.destroy = function (token_or_key, callbacks) {
+    this.Connect.destroy('/v1/metaprofiles/' + token_or_key + '', callbacks);
+};
+
+
 ZiggeoSdk.Streams = function (Connect) {
   this.Connect = Connect;
 };
@@ -349,12 +401,20 @@ ZiggeoSdk.Videos.prototype.get_bulk = function (data, callbacks) {
     this.Connect.postJSON('/v1/videos/get_bulk', callbacks, data);
 };
 
+ZiggeoSdk.Videos.prototype.stats_bulk = function (data, callbacks) {
+    this.Connect.postJSON('/v1/videos/stats_bulk', callbacks, data);
+};
+
 ZiggeoSdk.Videos.prototype.download_video = function (token_or_key, callbacks) {
     this.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
 };
 
 ZiggeoSdk.Videos.prototype.download_image = function (token_or_key, callbacks) {
     this.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
+};
+
+ZiggeoSdk.Videos.prototype.get_stats = function (token_or_key, callbacks) {
+    this.Connect.getJSON('/v1/videos/' + token_or_key + '/stats', callbacks);
 };
 
 ZiggeoSdk.Videos.prototype.push_to_service = function (token_or_key, data, callbacks) {
