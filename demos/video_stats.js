@@ -1,5 +1,5 @@
 /*
-	Usage: node video_get_stats.js APP_TOKEN PRIVATE_KEY VIDEO_TOKEN
+	Usage: node video_stats.js APP_TOKEN PRIVATE_KEY VIDEO_TOKEN
 */
 var app_token = process.argv[2];
 var app_private = process.argv[3];
