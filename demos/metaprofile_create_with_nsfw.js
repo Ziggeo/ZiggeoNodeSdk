@@ -16,13 +16,12 @@ ZiggeoSdk.MetaProfiles.create({
 }, {
 	success: function(data){
 		metaprofile_token = data.token;
-		console.log(data.token);
+		// create nsfw process and `reject` as the action whenever the nsfw found
 		ZiggeoSdk.MetaProfileProcess.create_nsfw_process(metaprofile_token, {nsfw_action: 'reject'}, {
 			success: function(data){
 				console.log(data)
 			}
-		}) 
-		console.log(data);
+		})
 	},
 	failure: function(error){
 		console.log(error);
