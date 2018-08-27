@@ -1,4 +1,4 @@
-# Ziggeo Node.js Server SDK 0.1.5
+# Ziggeo Node.js Server SDK 0.1.7
 
 Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
@@ -178,6 +178,18 @@ ZiggeoSdk.Videos.apply_effect(token_or_key, arguments, [callbacks])
  
 Arguments 
 - effectprofiletoken: *Effect Profile token (from the Effect Profiles configured for the app)* 
+
+
+#### Apply Meta 
+ 
+Apply a meta profile to a video. 
+
+```node 
+ZiggeoSdk.Videos.apply_meta(token_or_key, arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- metaprofiletoken: *Meta Profile token (from the Meta Profiles configured for the app)* 
 
 
 #### Update 

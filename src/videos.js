@@ -42,6 +42,10 @@ Videos.prototype.apply_effect = function (token_or_key, data, callbacks) {
     this.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
 };
 
+Videos.prototype.apply_meta = function (token_or_key, data, callbacks) {
+    this.Connect.postJSON('/v1/videos/' + token_or_key + '/metaprofile', callbacks, data);
+};
+
 Videos.prototype.update = function (token_or_key, data, callbacks) {
     this.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
 };
