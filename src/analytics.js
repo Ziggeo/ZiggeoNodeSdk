@@ -1,5 +1,6 @@
-var Analytics = function (Connect) {
+var Analytics = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 Analytics.prototype.get = function (data, callbacks) {

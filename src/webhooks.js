@@ -1,5 +1,6 @@
-var Webhooks = function (Connect) {
+var Webhooks = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 Webhooks.prototype.create = function (data, callbacks) {

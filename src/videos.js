@@ -1,5 +1,6 @@
-var Videos = function (Connect) {
+var Videos = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 Videos.prototype.index = function (data, callbacks) {

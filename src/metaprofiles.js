@@ -1,5 +1,6 @@
-var MetaProfiles = function (Connect) {
+var MetaProfiles = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 MetaProfiles.prototype.create = function (data, callbacks) {

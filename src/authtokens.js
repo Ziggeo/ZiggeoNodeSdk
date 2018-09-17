@@ -1,5 +1,6 @@
-var Authtokens = function (Connect) {
+var Authtokens = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 Authtokens.prototype.get = function (token, callbacks) {

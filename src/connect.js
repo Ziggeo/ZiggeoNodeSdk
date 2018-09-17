@@ -1,16 +1,16 @@
-var Connect = function (Config) {
+var Connect = function (Config, baseUri) {
 	this.Config = Config;
+	this.baseUri = baseUri;
 };
 
 Connect.prototype.__options = function(method, path, meta) {
 	meta = meta || {};
-	var server_api_url = this.Config.server_api_url;
-	for (var key in this.Config.regions)
-		if (this.Config.token.indexOf(key) === 0 )
-			server_api_url = this.Config.regions[key];
+	var hostSplit = (meta.host || this.baseUri).split("://");
+	var ssl = meta.ssl || hostSplit.length < 2 || hostSplit[0].toLowerCase() === "https";
+	var host = hostSplit[hostSplit.length - 1];
 	var obj = {
-		host: meta.host ? meta.host : server_api_url,
-		ssl: "ssl" in meta ? meta.ssl : !this.Config.local,
+		host: host,
+		ssl: ssl,
 		path: path,
 		method: method,
 		timeout: this.Config.requestTimeout,
@@ -43,7 +43,7 @@ Connect.prototype.requestChunks = function (method, path, callbacks, data, file,
 		}
 	}
 	var provider = options.ssl ? require("https") : require("http");
-	if (this.Config.local)
+	if (!options.ssl)
 		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 	var request = provider.request(options, function (result) {
 		var data = [];

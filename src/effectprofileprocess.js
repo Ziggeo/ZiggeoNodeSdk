@@ -1,5 +1,6 @@
-var EffectProfileProcess = function (Connect) {
+var EffectProfileProcess = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 EffectProfileProcess.prototype.index = function (effect_token_or_key, data, callbacks) {

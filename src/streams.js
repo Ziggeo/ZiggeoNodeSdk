@@ -1,5 +1,6 @@
-var Streams = function (Connect) {
+var Streams = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 Streams.prototype.index = function (video_token_or_key, data, callbacks) {

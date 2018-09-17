@@ -1,5 +1,6 @@
-var MetaProfileProcess = function (Connect) {
+var MetaProfileProcess = function (Connect, ApiConnect) {
   this.Connect = Connect;
+  this.ApiConnect = ApiConnect;
 };
 
 MetaProfileProcess.prototype.index = function (meta_token_or_key, callbacks) {
