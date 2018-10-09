@@ -8,5 +8,8 @@ var ZiggeoSdk = new Ziggeo(app_token, app_private);
 ZiggeoSdk.Videos.get (video_token, {
 	success: function (video) {
 		console.log (video);
+	},
+	failure: function(data) {
+		console.log(data);
 	}
 });
