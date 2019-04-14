@@ -7,6 +7,10 @@ Webhooks.prototype.create = function (data, callbacks) {
     this.Connect.post('/v1/api/hook', callbacks, data);
 };
 
+Webhooks.prototype.confirm = function (data, callbacks) {
+    this.Connect.post('/v1/api/confirmhook', callbacks, data);
+};
+
 Webhooks.prototype.destroy = function (data, callbacks) {
     this.Connect.post('/v1/api/removehook', callbacks, data);
 };

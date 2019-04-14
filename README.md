@@ -1,4 +1,4 @@
-# Ziggeo Node.js Server SDK 0.1.8
+# Ziggeo Node.js Server SDK 0.1.15
 
 Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
@@ -475,7 +475,6 @@ Arguments
 - client_can_index_videos: *Client is allowed to perform the index operation* 
 - client_cannot_access_unaccepted_videos: *Client cannot view unaccepted videos* 
 - enable_video_subpages: *Enable hosted video pages* 
-- enable_facebook: *Enable Facebook Support for hosted video pages* 
 
 
 #### Get Stats 
@@ -757,6 +756,19 @@ Arguments
 - events: *Comma-separated list of the events the webhook will catch. They must be valid webhook type events.* 
 
 
+#### Confirm 
+ 
+Confirm a webhook using its ID and the corresponding validation code. 
+
+```node 
+ZiggeoSdk.Webhooks.confirm(arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- webhook_id: *Webhook ID that's returned in the creation call.* 
+- validation_code: *Validation code that is sent to the webhook when created.* 
+
+
 #### Delete 
  
 Delete a webhook using its URL. 
@@ -794,6 +806,6 @@ Arguments
 
 ## License
 
-Copyright (c) 2013-2018 Ziggeo
+Copyright (c) 2013-2019 Ziggeo
  
 Apache 2.0 License
