@@ -1,10 +1,17 @@
-var Analytics = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:Analytics', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-Analytics.prototype.get = function (data, callbacks) {
-    this.Connect.postJSON('/v1/analytics/get', callbacks, data);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-module.exports = Analytics;
+            get: function (data, callbacks) {
+                this.Connect.postJSON('/v1/analytics/get', callbacks, data);
+            }
+
+        };
+    });
+});

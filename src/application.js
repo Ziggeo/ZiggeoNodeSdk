@@ -1,18 +1,25 @@
-var Application = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:Application', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-Application.prototype.get = function (callbacks) {
-    this.Connect.getJSON('/v1/application', callbacks);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-Application.prototype.update = function (data, callbacks) {
-    this.Connect.postJSON('/v1/application', callbacks, data);
-};
+            get: function (callbacks) {
+                this.Connect.getJSON('/v1/application', callbacks);
+            },
 
-Application.prototype.get_stats = function (data, callbacks) {
-    this.ApiConnect.getJSON('/server/v1/application/stats', callbacks, data);
-};
+            update: function (data, callbacks) {
+                this.Connect.postJSON('/v1/application', callbacks, data);
+            },
 
-module.exports = Application;
+            get_stats: function (data, callbacks) {
+                this.ApiConnect.getJSON('/server/v1/application/stats', callbacks, data);
+            }
+
+        };
+    });
+});

@@ -1,61 +1,72 @@
-var Streams = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-Streams.prototype.index = function (video_token_or_key, data, callbacks) {
-    this.Connect.getJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-Streams.prototype.get = function (video_token_or_key, token_or_key, callbacks) {
-    this.Connect.getJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '', callbacks);
-};
+            index: function (video_token_or_key, data, callbacks) {
+                this.Connect.getJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data);
+            },
 
-Streams.prototype.download_video = function (video_token_or_key, token_or_key, callbacks) {
-    this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
-};
+            get: function (video_token_or_key, token_or_key, callbacks) {
+                this.Connect.getJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '', callbacks);
+            },
 
-Streams.prototype.download_image = function (video_token_or_key, token_or_key, callbacks) {
-    this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
-};
+            download_video: function (video_token_or_key, token_or_key, callbacks) {
+                this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
+            },
 
-Streams.prototype.push_to_service = function (video_token_or_key, token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/push', callbacks, data);
-};
+            download_image: function (video_token_or_key, token_or_key, callbacks) {
+                this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
+            },
 
-Streams.prototype.destroy = function (video_token_or_key, token_or_key, callbacks) {
-    this.Connect.destroy('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '', callbacks);
-};
+            push_to_service: function (video_token_or_key, token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/push', callbacks, data);
+            },
 
-Streams.prototype.create = function (video_token_or_key, data, callbacks) {
-    var file = null;
-    if (data && data.file) {
-      file = data.file;
-      delete data.file;
-    }
-    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data, file);
-};
+            destroy: function (video_token_or_key, token_or_key, callbacks) {
+                this.Connect.destroy('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '', callbacks);
+            },
 
-Streams.prototype.attach_image = function (video_token_or_key, token_or_key, data, callbacks) {
-    var file = null;
-    if (data && data.file) {
-      file = data.file;
-      delete data.file;
-    }
-    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks, data, file);
-};
+            create: function (video_token_or_key, data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data, file);
+            },
 
-Streams.prototype.attach_video = function (video_token_or_key, token_or_key, data, callbacks) {
-    var file = null;
-    if (data && data.file) {
-      file = data.file;
-      delete data.file;
-    }
-    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks, data, file);
-};
+            attach_image: function (video_token_or_key, token_or_key, data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks, data, file);
+            },
 
-Streams.prototype.bind = function (video_token_or_key, token_or_key, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/bind', callbacks);
-};
+            attach_video: function (video_token_or_key, token_or_key, data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks, data, file);
+            },
 
-module.exports = Streams;
+            attach_subtitle: function (video_token_or_key, token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/subtitle', callbacks, data);
+            },
+
+            bind: function (video_token_or_key, token_or_key, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/bind', callbacks);
+            }
+
+        };
+    });
+});

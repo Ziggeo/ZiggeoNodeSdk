@@ -1,75 +1,82 @@
-var Videos = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-Videos.prototype.index = function (data, callbacks) {
-    this.Connect.getJSON('/v1/videos/', callbacks, data);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-Videos.prototype.count = function (data, callbacks) {
-    this.Connect.getJSON('/v1/videos/count', callbacks, data);
-};
+            index: function (data, callbacks) {
+                this.Connect.getJSON('/v1/videos/', callbacks, data);
+            },
 
-Videos.prototype.get = function (token_or_key, callbacks) {
-    this.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
-};
+            count: function (data, callbacks) {
+                this.Connect.getJSON('/v1/videos/count', callbacks, data);
+            },
 
-Videos.prototype.get_bulk = function (data, callbacks) {
-    this.Connect.postJSON('/v1/videos/get_bulk', callbacks, data);
-};
+            get: function (token_or_key, callbacks) {
+                this.Connect.getJSON('/v1/videos/' + token_or_key + '', callbacks);
+            },
 
-Videos.prototype.stats_bulk = function (data, callbacks) {
-    this.Connect.postJSON('/v1/videos/stats_bulk', callbacks, data);
-};
+            get_bulk: function (data, callbacks) {
+                this.Connect.postJSON('/v1/videos/get_bulk', callbacks, data);
+            },
 
-Videos.prototype.download_video = function (token_or_key, callbacks) {
-    this.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
-};
+            stats_bulk: function (data, callbacks) {
+                this.Connect.postJSON('/v1/videos/stats_bulk', callbacks, data);
+            },
 
-Videos.prototype.download_image = function (token_or_key, callbacks) {
-    this.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
-};
+            download_video: function (token_or_key, callbacks) {
+                this.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
+            },
 
-Videos.prototype.get_stats = function (token_or_key, callbacks) {
-    this.Connect.getJSON('/v1/videos/' + token_or_key + '/stats', callbacks);
-};
+            download_image: function (token_or_key, callbacks) {
+                this.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
+            },
 
-Videos.prototype.push_to_service = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
-};
+            get_stats: function (token_or_key, callbacks) {
+                this.Connect.getJSON('/v1/videos/' + token_or_key + '/stats', callbacks);
+            },
 
-Videos.prototype.apply_effect = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
-};
+            push_to_service: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + token_or_key + '/push', callbacks, data);
+            },
 
-Videos.prototype.apply_meta = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + token_or_key + '/metaprofile', callbacks, data);
-};
+            apply_effect: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + token_or_key + '/effect', callbacks, data);
+            },
 
-Videos.prototype.update = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
-};
+            apply_meta: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + token_or_key + '/metaprofile', callbacks, data);
+            },
 
-Videos.prototype.update_bulk = function (data, callbacks) {
-    this.Connect.postJSON('/v1/videos/update_bulk', callbacks, data);
-};
+            update: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + token_or_key + '', callbacks, data);
+            },
 
-Videos.prototype.destroy = function (token_or_key, callbacks) {
-    this.Connect.destroy('/v1/videos/' + token_or_key + '', callbacks);
-};
+            update_bulk: function (data, callbacks) {
+                this.Connect.postJSON('/v1/videos/update_bulk', callbacks, data);
+            },
 
-Videos.prototype.create = function (data, callbacks) {
-    var file = null;
-    if (data && data.file) {
-      file = data.file;
-      delete data.file;
-    }
-    this.Connect.postJSON('/v1/videos/', callbacks, data, file);
-};
+            destroy: function (token_or_key, callbacks) {
+                this.Connect.destroy('/v1/videos/' + token_or_key + '', callbacks);
+            },
 
-Videos.prototype.analytics = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/videos/' + token_or_key + '/analytics', callbacks, data);
-};
+            create: function (data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/videos/', callbacks, data, file);
+            },
 
-module.exports = Videos;
+            analytics: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/videos/' + token_or_key + '/analytics', callbacks, data);
+            }
+
+        };
+    });
+});

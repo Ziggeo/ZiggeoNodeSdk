@@ -1,18 +1,25 @@
-var Webhooks = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:Webhooks', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-Webhooks.prototype.create = function (data, callbacks) {
-    this.Connect.post('/v1/api/hook', callbacks, data);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-Webhooks.prototype.confirm = function (data, callbacks) {
-    this.Connect.post('/v1/api/confirmhook', callbacks, data);
-};
+            create: function (data, callbacks) {
+                this.Connect.post('/v1/api/hook', callbacks, data);
+            },
 
-Webhooks.prototype.destroy = function (data, callbacks) {
-    this.Connect.post('/v1/api/removehook', callbacks, data);
-};
+            confirm: function (data, callbacks) {
+                this.Connect.post('/v1/api/confirmhook', callbacks, data);
+            },
 
-module.exports = Webhooks;
+            destroy: function (data, callbacks) {
+                this.Connect.post('/v1/api/removehook', callbacks, data);
+            }
+
+        };
+    });
+});

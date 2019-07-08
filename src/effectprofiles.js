@@ -1,26 +1,33 @@
-var EffectProfiles = function (Connect, ApiConnect) {
-  this.Connect = Connect;
-  this.ApiConnect = ApiConnect;
-};
+Scoped.define('module:EffectProfiles', ['base:Class'], function (Class, scoped) {
+    return Class.extend({scoped: scoped}, function (inherited) {
+        return {
 
-EffectProfiles.prototype.create = function (data, callbacks) {
-    this.Connect.postJSON('/v1/effects/', callbacks, data);
-};
+            constructor: function (Connect, ApiConnect) {
+                inherited.constructor.call(this);
+                this.Connect = Connect;
+                this.ApiConnect = ApiConnect;
+            },
 
-EffectProfiles.prototype.index = function (data, callbacks) {
-    this.Connect.getJSON('/v1/effects/', callbacks, data);
-};
+            create: function (data, callbacks) {
+                this.Connect.postJSON('/v1/effects/', callbacks, data);
+            },
 
-EffectProfiles.prototype.get = function (token_or_key, callbacks) {
-    this.Connect.getJSON('/v1/effects/' + token_or_key + '', callbacks);
-};
+            index: function (data, callbacks) {
+                this.Connect.getJSON('/v1/effects/', callbacks, data);
+            },
 
-EffectProfiles.prototype.destroy = function (token_or_key, callbacks) {
-    this.Connect.destroy('/v1/effects/' + token_or_key + '', callbacks);
-};
+            get: function (token_or_key, callbacks) {
+                this.Connect.getJSON('/v1/effects/' + token_or_key + '', callbacks);
+            },
 
-EffectProfiles.prototype.update = function (token_or_key, data, callbacks) {
-    this.Connect.postJSON('/v1/effects/' + token_or_key + '', callbacks, data);
-};
+            destroy: function (token_or_key, callbacks) {
+                this.Connect.destroy('/v1/effects/' + token_or_key + '', callbacks);
+            },
 
-module.exports = EffectProfiles;
+            update: function (token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/effects/' + token_or_key + '', callbacks, data);
+            }
+
+        };
+    });
+});

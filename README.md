@@ -1,4 +1,4 @@
-# Ziggeo Node.js Server SDK 0.1.15
+# Ziggeo Node.js Server SDK 0.1.16
 
 Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only
 two lines of code in your site, service or app. This is the Node.js Server SDK repository.
@@ -371,6 +371,20 @@ ZiggeoSdk.Streams.attach_video(video_token_or_key, token_or_key, arguments, [cal
  
 Arguments 
 - file: *Video file to be attached* 
+
+
+#### Attach Subtitle 
+ 
+Attaches a video to a new stream 
+
+```node 
+ZiggeoSdk.Streams.attach_subtitle(video_token_or_key, token_or_key, arguments, [callbacks]) 
+``` 
+ 
+Arguments 
+- lang: *Subtitle language* 
+- label: *Subtitle reference* 
+- data: *Actual subtitle* 
 
 
 #### Bind 
