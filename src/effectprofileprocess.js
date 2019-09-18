@@ -31,6 +31,15 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     delete data.file;
                 }
                 this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark', callbacks, data, file);
+            },
+
+            edit_watermark_process: function (effect_token_or_key, token_or_key, data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark/' + token_or_key + '', callbacks, data, file);
             }
 
         };

@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.16 - 2019-07-05
+ziggeo - v0.1.17 - 2019-09-17
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.16",
-    "datetime": 1562357857766
+    "version": "0.1.17",
+    "datetime": 1568779093768
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -179,7 +179,6 @@ Scoped.define("module:Connect", [
 					data: data,
 					timeout: this.Config.requestTimeout
 				}).success(function (result) {
-				    console.log(result);
 					if (callbacks) {
 						if (post_process_data)
 							result = post_process_data(result);
@@ -280,6 +279,15 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     delete data.file;
                 }
                 this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark', callbacks, data, file);
+            },
+
+            edit_watermark_process: function (effect_token_or_key, token_or_key, data, callbacks) {
+                var file = null;
+                if (data && data.file) {
+                    file = data.file;
+                    delete data.file;
+                }
+                this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark/' + token_or_key + '', callbacks, data, file);
             }
 
         };
