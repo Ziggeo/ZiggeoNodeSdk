@@ -1,4 +1,3 @@
-var fs = require('fs');
 var app_token = process.argv[2];
 var private_key = process.argv[3];
 var video_token = process.argv[4];
