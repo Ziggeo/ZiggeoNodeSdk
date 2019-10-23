@@ -1,5 +1,5 @@
 fs = require('fs');
-var api_token = process.argv[2];
+var app_token = process.argv[2];
 var private_key = process.argv[3];
 var list_file = process.argv[4];
 

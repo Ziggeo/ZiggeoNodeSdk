@@ -2,7 +2,6 @@
 	Usage: node video_expiration_days_bulk.js APP_TOKEN PRIVATE_KEY "VIDEO1,VIDEO2,VIDEO3"  EXP_DAY_INT
 */
 
-var fs = require('fs');
 var app_token = process.argv[2];
 var private_key = process.argv[3];
 var video_tokens = process.argv[4];
