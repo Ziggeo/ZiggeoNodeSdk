@@ -20,7 +20,11 @@ Scoped.define("module:Connect", [
 					uri: this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path,
 					sendContentType: true,
 					data: data,
-					timeout: this.Config.requestTimeout
+					timeout: this.Config.requestTimeout,
+					resilience: 5,
+					resilience_filter: function (error) {
+						return error && error.status_code && error.status_code() < 500;
+					}
 				}).success(function (result) {
 					if (callbacks) {
 						if (post_process_data)

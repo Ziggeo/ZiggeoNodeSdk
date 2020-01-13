@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.17 - 2019-09-17
+ziggeo - v0.1.18 - 2020-01-13
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.17",
-    "datetime": 1568779093768
+    "version": "0.1.18",
+    "datetime": 1578951804611
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -177,7 +177,11 @@ Scoped.define("module:Connect", [
 					uri: this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path,
 					sendContentType: true,
 					data: data,
-					timeout: this.Config.requestTimeout
+					timeout: this.Config.requestTimeout,
+					resilience: 5,
+					resilience_filter: function (error) {
+						return error && error.status_code && error.status_code() < 500;
+					}
 				}).success(function (result) {
 					if (callbacks) {
 						if (post_process_data)
