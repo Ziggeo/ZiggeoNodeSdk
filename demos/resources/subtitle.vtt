@@ -1,0 +1,10 @@
+WEBVTT
+
+00:01.000 --> 00:03.000
+This is an example subtitle in WebVTT Format.
+
+00:03.000 --> 00:06.000
+You can attach WebVTT subtitles to a video stream
+
+00:06.000 --> 00:10.000
+and use them as text tracks on Ziggeo Video Player
