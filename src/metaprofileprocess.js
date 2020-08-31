@@ -2,10 +2,11 @@ Scoped.define('module:MetaProfileProcess', ['base:Class'], function (Class, scop
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (meta_token_or_key, callbacks) {

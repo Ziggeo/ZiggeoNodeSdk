@@ -9,13 +9,14 @@ var ZiggeoSdk = new Ziggeo(app_token, private_key);
 // you can find example of grants JSON at https://ziggeo.com/docs/api/authorization-tokens/examples
 ZiggeoSdk.Videos.get (video_token, {
     success: function (video) {
+        console.log(video);
         downloadVideo(video);
     }
 });
 function downloadVideo(video){
-    ZiggeoSdk.Streams.download_video(video.token, video.default_stream.token, function(data){
-        fs.writeFile(video.token+'.'+video.default_stream.video_type, data, function(err){
-            console.log('downloaded\n');
-        });
+    ZiggeoSdk.Videos.download_video(video.token, {
+        success: function (data) {
+            fs.writeFileSync(video.token + '.mp4', Buffer.from(data, "binary"));
+        }
     });
 }

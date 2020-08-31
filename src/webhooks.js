@@ -2,10 +2,11 @@ Scoped.define('module:Webhooks', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             create: function (data, callbacks) {

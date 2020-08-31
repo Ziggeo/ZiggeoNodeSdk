@@ -30,17 +30,22 @@ Scoped.define("module:ZiggeoSdk", [
                     if (this.Config.token.indexOf(key) === 0)
                         api_url = this.Config.api_regions[key];
                 this.ApiConnect = new Connect(this.Config, api_url);
+                var cdn_url = this.Config.cdn_url;
+                for (var key in this.Config.cdn_regions)
+                    if (this.Config.token.indexOf(key) === 0)
+                        cdn_url = this.Config.cdn_regions[key];
+                this.CdnConnect = new Connect(this.Config, cdn_url);
                 this.Auth = new Auth(this.Config);
-                this.Videos = new Videos(this.Connect, this.ApiConnect);
-                this.Streams = new Streams(this.Connect, this.ApiConnect);
-                this.Authtokens = new Authtokens(this.Connect, this.ApiConnect);
-                this.Application = new Application(this.Connect, this.ApiConnect);
-                this.EffectProfiles = new EffectProfiles(this.Connect, this.ApiConnect);
-                this.EffectProfileProcess = new EffectProfileProcess(this.Connect, this.ApiConnect);
-                this.MetaProfiles = new MetaProfiles(this.Connect, this.ApiConnect);
-                this.MetaProfileProcess = new MetaProfileProcess(this.Connect, this.ApiConnect);
-                this.Webhooks = new Webhooks(this.Connect, this.ApiConnect);
-                this.Analytics = new Analytics(this.Connect, this.ApiConnect);
+                this.Videos = new Videos(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Streams = new Streams(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Authtokens = new Authtokens(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Application = new Application(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.EffectProfiles = new EffectProfiles(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.EffectProfileProcess = new EffectProfileProcess(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.MetaProfiles = new MetaProfiles(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.MetaProfileProcess = new MetaProfileProcess(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Webhooks = new Webhooks(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Analytics = new Analytics(this.Connect, this.ApiConnect, this.CdnConnect);
             }
 
         };

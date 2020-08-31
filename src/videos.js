@@ -2,10 +2,11 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (data, callbacks) {
@@ -29,11 +30,11 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
             },
 
             download_video: function (token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
             },
 
             download_image: function (token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
             },
 
             get_stats: function (token_or_key, callbacks) {
@@ -70,7 +71,21 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/videos/', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/videos-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/videos/' + result['token'] + '/streams/' + result['default_stream']['token'] + '/confirm-video', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result['default_stream'] = resultInner;
+                    }
+                });
+            }
+        }, 'video', data, file, 'video_type');
+    } else
+                    this.Connect.postJSON('/v1/videos/', callbacks, data, file);
             },
 
             analytics: function (token_or_key, data, callbacks) {

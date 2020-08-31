@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.18 - 2020-01-13
+ziggeo - v0.1.20 - 2020-08-31
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.18",
-    "datetime": 1578951804611
+    "version": "0.1.20",
+    "datetime": 1598893432079
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -22,10 +22,11 @@ Scoped.define('module:Analytics', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             get: function (data, callbacks) {
@@ -40,10 +41,11 @@ Scoped.define('module:Application', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             get: function (callbacks) {
@@ -106,10 +108,11 @@ Scoped.define('module:Authtokens', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             get: function (token, callbacks) {
@@ -148,6 +151,8 @@ Scoped.define("module:Config", [
                 this.regions = {"r1":"https:\/\/srvapi-eu-west-1.ziggeo.com"};
                 this.api_url = "https://api-us-east-1.ziggeo.com";
                 this.api_regions = {"r1":"https:\/\/api-eu-west-1.ziggeo.com"};
+                this.cdn_url = "https://video-cdn.ziggeo.com";
+                this.cdn_regions = {"r1":"https:\/\/video-cdn-eu-west-1.ziggeo.com"};
                 this.requestTimeout = 60 * 1000;
             }
 
@@ -168,16 +173,18 @@ Scoped.define("module:Connect", [
 				this.baseUri = baseUri;
 			},
 
-			requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
+			requestChunks: function (method, path, callbacks, data, file, meta, post_process_data, raw_path) {
 				data = data || {};
 				if (typeof file === "string")
 					data.file = require("fs").createReadStream(file);
+				var uri = raw_path ? path : (this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path);
 				BetaJS.Ajax.Support.execute({
 					method: method,
-					uri: this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path,
+					uri: uri,
 					sendContentType: true,
 					data: data,
 					timeout: this.Config.requestTimeout,
+					decodeType: "raw",
 					resilience: 5,
 					resilience_filter: function (error) {
 						return error && error.status_code && error.status_code() < 500;
@@ -198,21 +205,17 @@ Scoped.define("module:Connect", [
 			},
 
 			requestBinary: function (method, path, callbacks, data, file, meta) {
-				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
-					return Buffer.concat(data);
-				});
+				return this.requestChunks(method, path, callbacks, data, file, meta);
 			},
 
 			request: function (method, path, callbacks, data, file, meta) {
-				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
-					return data.join("");
-				});
+				return this.requestChunks(method, path, callbacks, data, file, meta);
 			},
 
 			requestJSON: function (method, path, callbacks, data, file, meta) {
 				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
 					try {
-						return JSON.parse(data.join(""));
+						return JSON.parse(data);
 					} catch (e) {
 						return data;
 					}
@@ -245,6 +248,30 @@ Scoped.define("module:Connect", [
 
 			postJSON: function (path, callbacks, data, file, meta) {
 				return this.requestJSON("POST", path, callbacks, data, file, meta);
+			},
+
+			uploadFile: function (url, file, fields, callbacks) {
+				return this.requestChunks("POST", url, callbacks, fields, file, null, null, true);
+			},
+
+			postUploadJSON: function (path, callbacks, scope, data, file, type_key, meta) {
+				callbacks = callbacks || {}
+				data = data || {};
+				if (type_key && typeof file === "string")
+					data[type_key] = (file.split(".").reverse())[0];
+				var self = this;
+				return this.postJSON(path, {
+					failure: callbacks.failure,
+					success: function (result) {
+						self.uploadFile(result.url_data.url, file, result.url_data.fields, {
+							failure: callbacks.failure,
+							success: function () {
+								if (callbacks.success)
+									callbacks.success(result[scope])
+							}
+						})
+					}
+				}, data, null, meta);
 			}
 
 		};
@@ -254,10 +281,11 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (effect_token_or_key, data, callbacks) {
@@ -282,7 +310,21 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/effects/' + effect_token_or_key + '/process/watermark-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/' + result['token'] + '/confirm-watermark', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result = resultInner;
+                    }
+                });
+            }
+        }, 'effect_process', data, file, '');
+    } else
+                    this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark', callbacks, data, file);
             },
 
             edit_watermark_process: function (effect_token_or_key, token_or_key, data, callbacks) {
@@ -291,7 +333,21 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark/' + token_or_key + '', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/effects/' + effect_token_or_key + '/process/' + token_or_key + '/watermark-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/' + token_or_key + '/confirm-watermark', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result = resultInner;
+                    }
+                });
+            }
+        }, 'effect_process', data, file, '');
+    } else
+                    this.Connect.postJSON('/v1/effects/' + effect_token_or_key + '/process/watermark/' + token_or_key + '', callbacks, data, file);
             }
 
         };
@@ -302,10 +358,11 @@ Scoped.define('module:EffectProfiles', ['base:Class'], function (Class, scoped) 
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             create: function (data, callbacks) {
@@ -364,17 +421,22 @@ Scoped.define("module:ZiggeoSdk", [
                     if (this.Config.token.indexOf(key) === 0)
                         api_url = this.Config.api_regions[key];
                 this.ApiConnect = new Connect(this.Config, api_url);
+                var cdn_url = this.Config.cdn_url;
+                for (var key in this.Config.cdn_regions)
+                    if (this.Config.token.indexOf(key) === 0)
+                        cdn_url = this.Config.cdn_regions[key];
+                this.CdnConnect = new Connect(this.Config, cdn_url);
                 this.Auth = new Auth(this.Config);
-                this.Videos = new Videos(this.Connect, this.ApiConnect);
-                this.Streams = new Streams(this.Connect, this.ApiConnect);
-                this.Authtokens = new Authtokens(this.Connect, this.ApiConnect);
-                this.Application = new Application(this.Connect, this.ApiConnect);
-                this.EffectProfiles = new EffectProfiles(this.Connect, this.ApiConnect);
-                this.EffectProfileProcess = new EffectProfileProcess(this.Connect, this.ApiConnect);
-                this.MetaProfiles = new MetaProfiles(this.Connect, this.ApiConnect);
-                this.MetaProfileProcess = new MetaProfileProcess(this.Connect, this.ApiConnect);
-                this.Webhooks = new Webhooks(this.Connect, this.ApiConnect);
-                this.Analytics = new Analytics(this.Connect, this.ApiConnect);
+                this.Videos = new Videos(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Streams = new Streams(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Authtokens = new Authtokens(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Application = new Application(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.EffectProfiles = new EffectProfiles(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.EffectProfileProcess = new EffectProfileProcess(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.MetaProfiles = new MetaProfiles(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.MetaProfileProcess = new MetaProfileProcess(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Webhooks = new Webhooks(this.Connect, this.ApiConnect, this.CdnConnect);
+                this.Analytics = new Analytics(this.Connect, this.ApiConnect, this.CdnConnect);
             }
 
         };
@@ -384,10 +446,11 @@ Scoped.define('module:MetaProfileProcess', ['base:Class'], function (Class, scop
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (meta_token_or_key, callbacks) {
@@ -422,10 +485,11 @@ Scoped.define('module:MetaProfiles', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             create: function (data, callbacks) {
@@ -452,10 +516,11 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (video_token_or_key, data, callbacks) {
@@ -467,11 +532,11 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
             },
 
             download_video: function (video_token_or_key, token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks);
             },
 
             download_image: function (video_token_or_key, token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks);
             },
 
             push_to_service: function (video_token_or_key, token_or_key, data, callbacks) {
@@ -488,7 +553,21 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/videos/' + video_token_or_key + '/streams-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + result['token'] + '/confirm-video', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result = resultInner;
+                    }
+                });
+            }
+        }, 'stream', data, file, 'video_type');
+    } else
+                    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams', callbacks, data, file);
             },
 
             attach_image: function (video_token_or_key, token_or_key, data, callbacks) {
@@ -497,7 +576,21 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/confirm-image', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result = resultInner;
+                    }
+                });
+            }
+        }, 'stream', data, file, '');
+    } else
+                    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/image', callbacks, data, file);
             },
 
             attach_video: function (video_token_or_key, token_or_key, data, callbacks) {
@@ -506,7 +599,21 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/confirm-video', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result = resultInner;
+                    }
+                });
+            }
+        }, 'stream', data, file, 'video_type');
+    } else
+                    this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/video', callbacks, data, file);
             },
 
             attach_subtitle: function (video_token_or_key, token_or_key, data, callbacks) {
@@ -525,10 +632,11 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             index: function (data, callbacks) {
@@ -552,11 +660,11 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
             },
 
             download_video: function (token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + token_or_key + '/video', callbacks);
             },
 
             download_image: function (token_or_key, callbacks) {
-                this.Connect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
+                this.CdnConnect.getBinary('/v1/videos/' + token_or_key + '/image', callbacks);
             },
 
             get_stats: function (token_or_key, callbacks) {
@@ -593,7 +701,21 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
                     file = data.file;
                     delete data.file;
                 }
-                this.Connect.postJSON('/v1/videos/', callbacks, data, file);
+    if (file) {
+        self = this;
+        this.Connect.postUploadJSON('/v1/videos-upload-url', {
+            failure: callbacks ? callbacks.failure : null,
+            success: function (result) {
+                self.Connect.postJSON('/v1/videos/' + result['token'] + '/streams/' + result['default_stream']['token'] + '/confirm-video', {
+                    failure: callbacks ? callbacks.failure : null,
+                    success: function (resultInner) {
+                        result['default_stream'] = resultInner;
+                    }
+                });
+            }
+        }, 'video', data, file, 'video_type');
+    } else
+                    this.Connect.postJSON('/v1/videos/', callbacks, data, file);
             },
 
             analytics: function (token_or_key, data, callbacks) {
@@ -608,10 +730,11 @@ Scoped.define('module:Webhooks', ['base:Class'], function (Class, scoped) {
     return Class.extend({scoped: scoped}, function (inherited) {
         return {
 
-            constructor: function (Connect, ApiConnect) {
+            constructor: function (Connect, ApiConnect, CdnConnect) {
                 inherited.constructor.call(this);
                 this.Connect = Connect;
                 this.ApiConnect = ApiConnect;
+                this.CdnConnect = CdnConnect;
             },
 
             create: function (data, callbacks) {

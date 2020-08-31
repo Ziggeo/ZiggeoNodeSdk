@@ -11,16 +11,18 @@ Scoped.define("module:Connect", [
 				this.baseUri = baseUri;
 			},
 
-			requestChunks: function (method, path, callbacks, data, file, meta, post_process_data) {
+			requestChunks: function (method, path, callbacks, data, file, meta, post_process_data, raw_path) {
 				data = data || {};
 				if (typeof file === "string")
 					data.file = require("fs").createReadStream(file);
+				var uri = raw_path ? path : (this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path);
 				BetaJS.Ajax.Support.execute({
 					method: method,
-					uri: this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path,
+					uri: uri,
 					sendContentType: true,
 					data: data,
 					timeout: this.Config.requestTimeout,
+					decodeType: "raw",
 					resilience: 5,
 					resilience_filter: function (error) {
 						return error && error.status_code && error.status_code() < 500;
@@ -41,21 +43,17 @@ Scoped.define("module:Connect", [
 			},
 
 			requestBinary: function (method, path, callbacks, data, file, meta) {
-				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
-					return Buffer.concat(data);
-				});
+				return this.requestChunks(method, path, callbacks, data, file, meta);
 			},
 
 			request: function (method, path, callbacks, data, file, meta) {
-				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
-					return data.join("");
-				});
+				return this.requestChunks(method, path, callbacks, data, file, meta);
 			},
 
 			requestJSON: function (method, path, callbacks, data, file, meta) {
 				return this.requestChunks(method, path, callbacks, data, file, meta, function (data) {
 					try {
-						return JSON.parse(data.join(""));
+						return JSON.parse(data);
 					} catch (e) {
 						return data;
 					}
@@ -88,6 +86,30 @@ Scoped.define("module:Connect", [
 
 			postJSON: function (path, callbacks, data, file, meta) {
 				return this.requestJSON("POST", path, callbacks, data, file, meta);
+			},
+
+			uploadFile: function (url, file, fields, callbacks) {
+				return this.requestChunks("POST", url, callbacks, fields, file, null, null, true);
+			},
+
+			postUploadJSON: function (path, callbacks, scope, data, file, type_key, meta) {
+				callbacks = callbacks || {}
+				data = data || {};
+				if (type_key && typeof file === "string")
+					data[type_key] = (file.split(".").reverse())[0];
+				var self = this;
+				return this.postJSON(path, {
+					failure: callbacks.failure,
+					success: function (result) {
+						self.uploadFile(result.url_data.url, file, result.url_data.fields, {
+							failure: callbacks.failure,
+							success: function () {
+								if (callbacks.success)
+									callbacks.success(result[scope])
+							}
+						})
+					}
+				}, data, null, meta);
 			}
 
 		};
