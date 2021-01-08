@@ -1,6 +1,6 @@
 # Ziggeo's Node.js Server SDK
 
-latest version: **0.1.20**
+latest version: **0.1.23**
 
 ## Index
 
@@ -76,6 +76,7 @@ latest version: **0.1.20**
         4. [Meta Profile Process Create Video Analysis Process](#method-meta-profile-process-create-video-analysis-process)
         5. [Meta Profile Process Create Audio Transcription Process](#method-meta-profile-process-create-audio-transcription-process)
         6. [Meta Profile Process Create Nsfw Process](#method-meta-profile-process-create-nsfw-process)
+        7. [Meta Profile Process Create Profanity Process](#method-meta-profile-process-create-profanity-process)
     11. [Methods for Webhooks](#method-webhooks)
         1. [Webhooks Create](#method-webhooks-create)
         2. [Webhooks Confirm](#method-webhooks-confirm)
@@ -820,6 +821,17 @@ ZiggeoSdk.MetaProfileProcess.create_nsfw_process(meta_token_or_key, arguments, [
  Arguments
 - nsfw_action: *One of the following three: approve, reject, nothing.*
 
+#### Create Profanity Process<a name="method-meta-profile-process-create-profanity-process"></a>
+
+Create a new profanity filter meta process
+
+```node
+ZiggeoSdk.MetaProfileProcess.create_profanity_process(meta_token_or_key, arguments, [callbacks])
+```
+
+ Arguments
+- profanity_action: *One of the following three: approve, reject, nothing.*
+
 ### Webhooks<a name="method-webhooks"></a>
 
 
@@ -886,6 +898,6 @@ ZiggeoSdk.Analytics.get(arguments, [callbacks])
 
 ## License <a name="license"></a>
 
-Copyright (c) 2013-2020 Ziggeo
+Copyright (c) 2013-2021 Ziggeo
  
 Apache 2.0 License

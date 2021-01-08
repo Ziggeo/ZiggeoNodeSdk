@@ -31,6 +31,10 @@ Scoped.define('module:MetaProfileProcess', ['base:Class'], function (Class, scop
 
             create_nsfw_process: function (meta_token_or_key, data, callbacks) {
                 this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/nsfw', callbacks, data);
+            },
+
+            create_profanity_process: function (meta_token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/profanity', callbacks, data);
             }
 
         };

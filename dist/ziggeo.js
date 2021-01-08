@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.20 - 2020-08-31
+ziggeo - v0.1.23 - 2021-01-08
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.20",
-    "datetime": 1598893432079
+    "version": "0.1.23",
+    "datetime": 1610132861026
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -475,6 +475,10 @@ Scoped.define('module:MetaProfileProcess', ['base:Class'], function (Class, scop
 
             create_nsfw_process: function (meta_token_or_key, data, callbacks) {
                 this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/nsfw', callbacks, data);
+            },
+
+            create_profanity_process: function (meta_token_or_key, data, callbacks) {
+                this.Connect.postJSON('/v1/metaprofiles/' + meta_token_or_key + '/process/profanity', callbacks, data);
             }
 
         };
