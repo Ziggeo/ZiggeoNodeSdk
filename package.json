@@ -1,7 +1,7 @@
 {
 	"name": "ziggeo",
 	"description": "Ziggeo API (https://ziggeo.com) allows you to integrate video recording and playback with only two lines of code in your site, service or app. This is the NodeJS Server SDK.",
-	"version": "0.1.23",
+	"version": "0.1.24",
 	"author": "Ziggeo",
 	"repository": "https://github.com/Ziggeo/ZiggeoNodeSdk.git",
 	"license": "Apache-2.0",

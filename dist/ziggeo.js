@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.23 - 2021-01-08
+ziggeo - v0.1.24 - 2021-02-06
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.23",
-    "datetime": 1610132861026
+    "version": "0.1.24",
+    "datetime": 1612641546003
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -147,8 +147,8 @@ Scoped.define("module:Config", [
                 this.token = token;
                 this.private_key = private_key;
                 this.encryption_key = encryption_key;
-                this.server_api_url = "https://srvapi.ziggeo.com";
-                this.regions = {"r1":"https:\/\/srvapi-eu-west-1.ziggeo.com"};
+                this.server_api_url = "https://srv-api.ziggeo.com";
+                this.regions = {"r1":"https:\/\/srv-api-eu-west-1.ziggeo.com"};
                 this.api_url = "https://api-us-east-1.ziggeo.com";
                 this.api_regions = {"r1":"https:\/\/api-eu-west-1.ziggeo.com"};
                 this.cdn_url = "https://video-cdn.ziggeo.com";

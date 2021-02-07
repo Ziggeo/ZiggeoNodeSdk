@@ -1,6 +1,6 @@
 # Ziggeo's Node.js Server SDK
 
-latest version: **0.1.23**
+latest version: **0.1.24**
 
 ## Index
 
@@ -364,6 +364,9 @@ ZiggeoSdk.Videos.create(arguments, [callbacks])
 - tags: *Video Tags*
 - key: *Unique (optional) name of video*
 - volatile: *Automatically removed this video if it remains empty*
+- effect_profile: *Set the effect profile that you want to have applied to your video.*
+- meta_profile: *Set the meta profile that you want to have applied to your video once created.*
+- video_profile: *Set the video profile that you want to have applied to your video as you create it.*
 
 #### Analytics<a name="method-videos-analytics"></a>
 
