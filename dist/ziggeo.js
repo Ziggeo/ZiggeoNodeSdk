@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.24 - 2021-02-06
+ziggeo - v0.1.25 - 2021-02-11
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.24",
-    "datetime": 1612641546003
+    "version": "0.1.25",
+    "datetime": 1613081496936
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -177,6 +177,8 @@ Scoped.define("module:Connect", [
 				data = data || {};
 				if (typeof file === "string")
 					data.file = require("fs").createReadStream(file);
+				else
+					data.file = file;
 				var uri = raw_path ? path : (this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path);
 				BetaJS.Ajax.Support.execute({
 					method: method,

@@ -15,6 +15,8 @@ Scoped.define("module:Connect", [
 				data = data || {};
 				if (typeof file === "string")
 					data.file = require("fs").createReadStream(file);
+				else
+					data.file = file;
 				var uri = raw_path ? path : (this.baseUri.replace("://", "://" + this.Config.token + ":" + this.Config.private_key + "@") + path);
 				BetaJS.Ajax.Support.execute({
 					method: method,
