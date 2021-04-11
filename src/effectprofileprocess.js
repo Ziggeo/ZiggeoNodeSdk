@@ -40,6 +40,7 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -63,6 +64,7 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }

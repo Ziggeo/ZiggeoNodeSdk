@@ -80,6 +80,7 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result['default_stream'] = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }

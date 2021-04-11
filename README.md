@@ -1,6 +1,6 @@
 # Ziggeo's Node.js Server SDK
 
-latest version: **0.1.25**
+latest version: **0.1.26**
 
 ## Index
 

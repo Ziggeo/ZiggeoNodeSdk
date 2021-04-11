@@ -48,6 +48,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -71,6 +72,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -94,6 +96,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }

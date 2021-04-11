@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.25 - 2021-02-11
+ziggeo - v0.1.26 - 2021-04-11
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.25",
-    "datetime": 1613081496936
+    "version": "0.1.26",
+    "datetime": 1618176919799
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -321,6 +321,7 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -344,6 +345,7 @@ Scoped.define('module:EffectProfileProcess', ['base:Class'], function (Class, sc
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -568,6 +570,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -591,6 +594,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -614,6 +618,7 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
@@ -716,6 +721,7 @@ Scoped.define('module:Videos', ['base:Class'], function (Class, scoped) {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result['default_stream'] = resultInner;
+                        if (callbacks && callbacks.success) callbacks.success(result);
                     }
                 });
             }
