@@ -1,6 +1,6 @@
 # Ziggeo's Node.js Server SDK
 
-latest version: **0.1.26**
+latest version: **0.1.27**
 
 ## Index
 
@@ -901,6 +901,6 @@ ZiggeoSdk.Analytics.get(arguments, [callbacks])
 
 ## License <a name="license"></a>
 
-Copyright (c) 2013-2021 Ziggeo
+Copyright (c) 2013-2022 Ziggeo
  
 Apache 2.0 License

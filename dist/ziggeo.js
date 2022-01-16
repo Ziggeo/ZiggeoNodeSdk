@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.26 - 2021-04-11
+ziggeo - v0.1.27 - 2022-01-16
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.26",
-    "datetime": 1618176919799
+    "version": "0.1.27",
+    "datetime": 1642352727782
 };
 });
 Scoped.require(['module:'], function (mod) {
