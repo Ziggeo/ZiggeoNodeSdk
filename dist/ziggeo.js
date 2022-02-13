@@ -1,5 +1,5 @@
 /*!
-ziggeo - v0.1.28 - 2022-02-13
+ziggeo - v0.1.29 - 2022-02-13
 Copyright (c) 
 Apache-2.0 Software License.
 */
@@ -11,8 +11,8 @@ Scoped.binding('module', 'global:ZiggeoSdk');
 Scoped.define("module:", function () {
 	return {
     "guid": "dc4166d4-b177-4212-abd5-ab255907a7d8",
-    "version": "0.1.28",
-    "datetime": 1644781229582
+    "version": "0.1.29",
+    "datetime": 1644782406707
 };
 });
 Scoped.require(['module:'], function (mod) {
@@ -99,10 +99,10 @@ Scoped.define('module:Audio_streams', ['base:Class'], function (Class, scoped) {
                 }
     if (file) {
         self = this;
-        this.Connect.postUploadJSON('/server/v1/audios/' + video_token_or_key + '/streams-upload-url', {
+        this.Connect.postUploadJSON('/server/v1/audios/' + audio_token_or_key + '/streams-upload-url', {
             failure: callbacks ? callbacks.failure : null,
             success: function (result) {
-                self.Connect.postJSON('/server/v1/audios/' + video_token_or_key + '/streams/' + result['token'] + '/confirm-video', {
+                self.Connect.postJSON('/server/v1/audios/' + audio_token_or_key + '/streams/' + result['token'] + '/confirm-video', {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
@@ -110,7 +110,7 @@ Scoped.define('module:Audio_streams', ['base:Class'], function (Class, scoped) {
                     }
                 });
             }
-        }, 'stream', data, file, 'video_type');
+        }, 'stream', data, file, 'audio_type');
     } else
                     this.ApiConnect.postJSON('/server/v1/audios/bytoken/' + audio_token_or_key + '/streams', callbacks, data, file);
             }

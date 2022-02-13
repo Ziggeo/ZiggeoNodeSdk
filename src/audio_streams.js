@@ -33,10 +33,10 @@ Scoped.define('module:Audio_streams', ['base:Class'], function (Class, scoped) {
                 }
     if (file) {
         self = this;
-        this.Connect.postUploadJSON('/server/v1/audios/' + video_token_or_key + '/streams-upload-url', {
+        this.Connect.postUploadJSON('/server/v1/audios/' + audio_token_or_key + '/streams-upload-url', {
             failure: callbacks ? callbacks.failure : null,
             success: function (result) {
-                self.Connect.postJSON('/server/v1/audios/' + video_token_or_key + '/streams/' + result['token'] + '/confirm-video', {
+                self.Connect.postJSON('/server/v1/audios/' + audio_token_or_key + '/streams/' + result['token'] + '/confirm-video', {
                     failure: callbacks ? callbacks.failure : null,
                     success: function (resultInner) {
                         result = resultInner;
@@ -44,7 +44,7 @@ Scoped.define('module:Audio_streams', ['base:Class'], function (Class, scoped) {
                     }
                 });
             }
-        }, 'stream', data, file, 'video_type');
+        }, 'stream', data, file, 'audio_type');
     } else
                     this.ApiConnect.postJSON('/server/v1/audios/bytoken/' + audio_token_or_key + '/streams', callbacks, data, file);
             }
