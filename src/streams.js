@@ -107,10 +107,6 @@ Scoped.define('module:Streams', ['base:Class'], function (Class, scoped) {
 
             attach_subtitle: function (video_token_or_key, token_or_key, data, callbacks) {
                 this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/subtitle', callbacks, data);
-            },
-
-            bind: function (video_token_or_key, token_or_key, callbacks) {
-                this.Connect.postJSON('/v1/videos/' + video_token_or_key + '/streams/' + token_or_key + '/bind', callbacks);
             }
 
         };
