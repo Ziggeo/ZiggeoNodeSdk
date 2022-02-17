@@ -1,6 +1,6 @@
 # Ziggeo's Node.js Server SDK
 
-latest version: **0.1.29**
+latest version: **0.1.30**
 
 ## Index
 
@@ -51,12 +51,12 @@ latest version: **0.1.29**
         7. [Audios Update Bulk](#method-audios-update-bulk)
         8. [Audios Destroy](#method-audios-destroy)
         9. [Audios Create](#method-audios-create)
-    6. [Methods for Audio_streams](#method-audio-streams)
-        1. [Audio_streams Index](#method-audio-streams-index)
-        2. [Audio_streams Get](#method-audio-streams-get)
-        3. [Audio_streams Download Audio](#method-audio-streams-download-audio)
-        4. [Audio_streams Destroy](#method-audio-streams-destroy)
-        5. [Audio_streams Create](#method-audio-streams-create)
+    6. [Methods for Audio Streams](#method-audio-streams)
+        1. [Audio Streams Index](#method-audio-streams-index)
+        2. [Audio Streams Get](#method-audio-streams-get)
+        3. [Audio Streams Download Audio](#method-audio-streams-download-audio)
+        4. [Audio Streams Destroy](#method-audio-streams-destroy)
+        5. [Audio Streams Create](#method-audio-streams-create)
     7. [Methods for Authtokens](#method-authtokens)
         1. [Authtokens Get](#method-authtokens-get)
         2. [Authtokens Update](#method-authtokens-update)
@@ -190,7 +190,7 @@ Currently available methods are branched off within different categories:
 1. Videos
 2. Streams
 3. Audios
-4. Audio_streams
+4. Audio Streams
 5. Authtokens
 6. Application
 7. Effect Profiles
@@ -621,7 +621,7 @@ ZiggeoSdk.Audios.create(arguments, [callbacks])
 - key: *Unique (optional) name of audio*
 - volatile: *Automatically removed this video if it remains empty*
 
-### Audio_streams<a name="method-audio-streams"></a>
+### Audio Streams<a name="method-audio-streams"></a>
 
 
 The streams resource allows you to directly access all streams associated with a single audio.
@@ -631,7 +631,7 @@ The streams resource allows you to directly access all streams associated with a
 Return all streams associated with a audio
 
 ```node
-ZiggeoSdk.Audio_streams.index(audio_token_or_key, arguments, [callbacks])
+ZiggeoSdk.AudioStreams.index(audio_token_or_key, arguments, [callbacks])
 ```
 
  Arguments
@@ -642,7 +642,7 @@ ZiggeoSdk.Audio_streams.index(audio_token_or_key, arguments, [callbacks])
 Get a single stream
 
 ```node
-ZiggeoSdk.Audio_streams.get(audio_token_or_key, token_or_key, [callbacks])
+ZiggeoSdk.AudioStreams.get(audio_token_or_key, token_or_key, [callbacks])
 ```
 
 #### Download Audio<a name="method-audio-streams-download-audio"></a>
@@ -650,7 +650,7 @@ ZiggeoSdk.Audio_streams.get(audio_token_or_key, token_or_key, [callbacks])
 Download the audio data associated with the stream
 
 ```node
-ZiggeoSdk.Audio_streams.download_audio(audio_token_or_key, token_or_key, [callbacks])
+ZiggeoSdk.AudioStreams.download_audio(audio_token_or_key, token_or_key, [callbacks])
 ```
 
 #### Delete<a name="method-audio-streams-delete"></a>
@@ -658,7 +658,7 @@ ZiggeoSdk.Audio_streams.download_audio(audio_token_or_key, token_or_key, [callba
 Delete the stream
 
 ```node
-ZiggeoSdk.Audio_streams.destroy(audio_token_or_key, token_or_key, [callbacks])
+ZiggeoSdk.AudioStreams.destroy(audio_token_or_key, token_or_key, [callbacks])
 ```
 
 #### Create<a name="method-audio-streams-create"></a>
@@ -666,7 +666,7 @@ ZiggeoSdk.Audio_streams.destroy(audio_token_or_key, token_or_key, [callbacks])
 Create a new stream
 
 ```node
-ZiggeoSdk.Audio_streams.create(audio_token_or_key, arguments, [callbacks])
+ZiggeoSdk.AudioStreams.create(audio_token_or_key, arguments, [callbacks])
 ```
 
  Arguments

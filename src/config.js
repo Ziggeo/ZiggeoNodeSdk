@@ -16,6 +16,8 @@ Scoped.define("module:Config", [
                 this.api_regions = {"r1":"https:\/\/api-eu-west-1.ziggeo.com"};
                 this.cdn_url = "https://video-cdn.ziggeo.com";
                 this.cdn_regions = {"r1":"https:\/\/video-cdn-eu-west-1.ziggeo.com"};
+                this.js_cdn_url = "https://media-cdn.ziggeo.com";
+                this.js_cdn_regions = {"r1":"https:\/\/media-cdn-eu-west-1.ziggeo.com"};
                 this.requestTimeout = 60 * 1000;
             }
 
