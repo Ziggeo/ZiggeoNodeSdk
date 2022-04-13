@@ -18,6 +18,6 @@ ZiggeoSdk.MetaProfiles.create( { title: profile_title }, {
 		console.log(data);
 	},
 	failure: function(error) {
-		conosole.log(error);
+		console.log(error);
 	}
 });
