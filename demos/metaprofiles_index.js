@@ -22,6 +22,6 @@ ZiggeoSdk.MetaProfiles.index(args, {
 		console.log(data);
 	},
 	failure: function(error) {
-		conosole.log(error);
+		console.log(error);
 	}
 });
